@@ -1,0 +1,4 @@
+*.userprefs
+packages
+XamarinOpenGL.Droid/bin
+XamarinOpenGL.Droid/obj
