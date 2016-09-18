@@ -57,6 +57,7 @@
     <Compile Include="MyGLRenderer.cs" />
     <Compile Include="Square.cs" />
     <Compile Include="Triangle.cs" />
+    <Compile Include="Image.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -72,6 +73,7 @@
     <AndroidResource Include="Resources\mipmap-xhdpi\Icon.png" />
     <AndroidResource Include="Resources\mipmap-xxhdpi\Icon.png" />
     <AndroidResource Include="Resources\mipmap-xxxhdpi\Icon.png" />
+    <AndroidResource Include="Resources\drawable\image.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\drawable\" />

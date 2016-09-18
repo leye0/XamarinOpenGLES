@@ -28,6 +28,7 @@ using Android.Content;
 using Android.Opengl;
 using Android.Util;
 using Java.Lang;
+using Java.Nio;
 /**
 * Provides drawing instructions for a GLSurfaceView object. This class
 * must override the OpenGL ES drawing lifecycle methods:
@@ -42,9 +43,17 @@ namespace XamarinOpenGL.Droid
 {
 	public class MyGLRenderer : Object, GLSurfaceView.IRenderer
 	{
+		Context _context;
+		public MyGLRenderer(Context context)
+		{
+			_context = context;
+		}
+
 		static string TAG = "MyGLRenderer";
 		Triangle _triangle;
 		Square _square;
+		Image _image;
+
 
 		// mMVPMatrix is an abbreviation for "Model View Projection Matrix"
 		float[] _MVPMatrix = new float[16];
@@ -61,10 +70,13 @@ namespace XamarinOpenGL.Droid
 		public void OnSurfaceCreated(Javax.Microedition.Khronos.Opengles.IGL10 unused, Javax.Microedition.Khronos.Egl.EGLConfig config)
 		{
 			// Set the background frame color
+			//_triangle = new Triangle();
+			//_square = new Square();
+			_image = new Image(_context);
+
 			GLES20.GlClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-			_triangle = new Triangle();
-			_square = new Square();
+
 		}
 
 		public void OnDrawFrame(Javax.Microedition.Khronos.Opengles.IGL10 unused)
@@ -81,7 +93,11 @@ namespace XamarinOpenGL.Droid
 			Matrix.MultiplyMM(_MVPMatrix, 0, _projectionMatrix, 0, _viewMatrix, 0);
 
 			// Draw square
-			_square.Draw(_MVPMatrix);
+			//_square.Draw(_MVPMatrix);
+
+			// Draw square
+			_image.Draw(_MVPMatrix);
+
 
 			// Create a rotation for the triangle
 
@@ -98,7 +114,7 @@ namespace XamarinOpenGL.Droid
 			Matrix.MultiplyMM(scratch, 0, _MVPMatrix, 0, _rotationMatrix, 0);
 
 			// Draw triangle
-			_triangle.Draw(scratch);
+			//_triangle.Draw(scratch);
 		}
 
 		public void OnSurfaceChanged(Javax.Microedition.Khronos.Opengles.IGL10 unused, int width, int height)
@@ -172,40 +188,40 @@ namespace XamarinOpenGL.Droid
 			get { return _angle; }
 		}
 
-		public int LoadTexture(Context context, int resourceId)
-		{
-			var textureHandle = new int[1];
+		//public int LoadTexture(Context context, int resourceId)
+		//{
+		//	var textureHandle = new int[1];
 
-			GLES20.GlGenTextures(1, textureHandle, 0);
+		//	GLES20.GlGenTextures(1, textureHandle, 0);
 
-			if (textureHandle[0] != 0)
-			{
-				var options = new Android.Graphics.BitmapFactory.Options();
-				options.InScaled = false;   // No pre-scaling
+		//	if (textureHandle[0] != 0)
+		//	{
+		//		var options = new Android.Graphics.BitmapFactory.Options();
+		//		options.InScaled = false;   // No pre-scaling
 
-				// Read in the resource
-				var bitmap = Android.Graphics.BitmapFactory.DecodeResource(context.Resources, resourceId, options);
+		//		// Read in the resource
+		//		var bitmap = Android.Graphics.BitmapFactory.DecodeResource(context.Resources, resourceId, options);
 
-				// Bind to the texture in OpenGL
-				GLES20.GlBindTexture(GLES20.GlTexture2d, textureHandle[0]);
+		//		// Bind to the texture in OpenGL
+		//		GLES20.GlBindTexture(GLES20.GlTexture2d, textureHandle[0]);
 
-				// Set filtering
-				GLES20.GlTexParameteri(GLES20.GlTexture2d, GLES20.GlTextureMinFilter, GLES20.GlNearest);
-				GLES20.GlTexParameteri(GLES20.GlTexture2d, GLES20.GlTextureMagFilter, GLES20.GlNearest);
+		//		// Set filtering
+		//		GLES20.GlTexParameteri(GLES20.GlTexture2d, GLES20.GlTextureMinFilter, GLES20.GlNearest);
+		//		GLES20.GlTexParameteri(GLES20.GlTexture2d, GLES20.GlTextureMagFilter, GLES20.GlNearest);
 
-				// Load the bitmap into the bound texture.
-				GLUtils.TexImage2D(GLES20.GlTexture2d, 0, bitmap, 0);
+		//		// Load the bitmap into the bound texture.
+		//		GLUtils.TexImage2D(GLES20.GlTexture2d, 0, bitmap, 0);
 
-				// Recycle the bitmap, since its data has been loaded into OpenGL.
-				bitmap.Recycle();
-			}
+		//		// Recycle the bitmap, since its data has been loaded into OpenGL.
+		//		bitmap.Recycle();
+		//	}
 
-			if (textureHandle[0] == 0)
-			{
-				throw new RuntimeException("Error loading texture.");
-			}
+		//	if (textureHandle[0] == 0)
+		//	{
+		//		throw new RuntimeException("Error loading texture.");
+		//	}
 
-			return textureHandle[0];
-		}
+		//	return textureHandle[0];
+		//}
 	}
 }
